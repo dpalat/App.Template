@@ -17,10 +17,11 @@ namespace App.Template.XForms.Android
     {
         protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(bundle);
 
             TabLayoutResource = Resource.Layout.tabbar;
             ToolbarResource = Resource.Layout.toolbar;
+
+            base.OnCreate(bundle);
 
             Forms.Init(this, bundle);
 

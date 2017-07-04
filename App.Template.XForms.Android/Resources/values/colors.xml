@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <color name="primary">#3498db</color>
+    <color name="primaryDark">#1976D2</color>
+    <color name="accent">#FFC107</color>
+    <color name="window_background">#F5F5F5</color>
+
+  <!--Original colors-->
+  <color name="white" >#ffffff</color>
+  <color name="colorPrimary">#397dc0</color>  
+  <color name="colorPrimaryDark">#397dc0</color>  
+  <color name="colorAccent">#2f4b8b</color>
+  <color name="textColorPrimary">#504F53</color>
+  <color name="windowBackground">#E7E7E7</color>
+  <color name="disabledButtonBackground">#bbbbbb</color>
+
+  <color name="btn_light_blue">#397dc0</color>
+  <color name="btn_light_green_pressed">#2f4b8b</color>
+  <color name="gray_action_bar">#FF646464</color>
+  <color name="menu_item">#9d9d9d</color>
+  <color name="list_divider">#aaaaaa</color>
+  <color name="bkg_recycler_view">#fafafa</color>
+  <color name="hyperlink_blue">#3399CC</color>
+  <color name="item_drawer_default">#97979a</color>
+
+  <!--Header Navigation Drawer gradient -->
+  <color name="header_home_start">#2f4b8b</color>
+  <color name="header_home_center">#397dc0</color>
+  <color name="header_home_end">#3399CC</color>
+
+  <color name="menu_item_tint">#504F53</color>
+  <color name="item_drawer_tint">#397dc0</color>
+
+</resources>

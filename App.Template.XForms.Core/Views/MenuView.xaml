@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxContentPage
+    x:Class="App.Template.XForms.Core.Views.MenuView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icp="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+    xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+    xmlns:views="clr-namespace:MvvmCross.Forms.Core;assembly=MvvmCross.Forms"
+    Title="Menu"
+    Icon="ic_menu.png">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="0,20,0,0" />
+        </OnPlatform>
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand">
+            <ListView
+                CachingStrategy="RecycleElement"
+                HasUnevenRows="True"
+                ItemSelected="OnListViewItemSelected"
+                ItemsSource="{Binding Menu, Mode=TwoWay}"
+                SelectedItem="{Binding SelectedMenuItem, Mode=TwoWay}"
+                SeparatorColor="Transparent">
+                <ListView.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="15" />
+                        </Grid.RowDefinitions>
+                        <BoxView
+                            Grid.RowSpan="5"
+                            Grid.ColumnSpan="3"
+                            BackgroundColor="#3789C6" />
+                        <icp:CircleImage
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="10"
+                            Aspect="AspectFit"
+                            HeightRequest="64"
+                            HorizontalOptions="Start"
+                            Source="img_profile_generic.png"
+                            WidthRequest="64" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            FontSize="14"
+                            Text="{Binding UserFullName, Mode=OneWay}"
+                            TextColor="White" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            FontSize="14"
+                            Text="{Binding UserEmail, Mode=OneWay}"
+                            TextColor="White" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Text=" " />
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Grid.Column="0"
+                                    Margin="10,10,0,10"
+                                    Source="{Binding Image, Mode=OneWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="1"
+                                    Margin="10,10,0,10"
+                                    FontSize="14"
+                                    Text="{Binding Text, Mode=OneWay}"
+                                    TextColor="#504F53"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</views:MvxContentPage>

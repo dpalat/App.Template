@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+  </PropertyGroup>
+   
+  <ItemGroup>
+	<!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
+	<None Remove="**\*.xaml" />
+
+	<Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
+	<EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+  </ItemGroup>
+   
+  <ItemGroup>
+    <PackageReference Include="MvvmCross.Forms" Version="5.0.5" />
+    <PackageReference Include="MvvmCross.Plugin.MethodBinding" Version="5.0.5" />
+    <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="1.8.1" />
+    <PackageReference Include="Xamarin.Forms" Version="2.3.4.247" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.2.9" />
+  </ItemGroup>
+   
+  <ItemGroup>
+    <Compile Update="Views\ScanBarcodeView.xaml.cs">
+      <DependentUpon>ScanBarcodeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ThirdView.xaml.cs">
+      <DependentUpon>ThirdView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SecondView.xaml.cs">
+      <DependentUpon>SecondView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FirstView.xaml.cs">
+      <DependentUpon>FirstView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+   
+  <ItemGroup>
+    <EmbeddedResource Update="Views\FirstView.xaml">
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+   
+</Project>

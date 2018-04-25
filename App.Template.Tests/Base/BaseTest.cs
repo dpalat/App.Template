@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Core;
-using MvvmCross.Platform.Platform;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvvmCross;
+using MvvmCross.Base;
+using MvvmCross.Logging;
+using MvvmCross.Views;
 
 namespace App.Template.Tests.Base
 {
@@ -18,7 +18,7 @@ namespace App.Template.Tests.Base
         {
             get
             {
-                Mvx.TryResolve(out IMvxTrace trace);
+                Mvx.TryResolve(out IMvxLog trace);
                 _traceLog = ((UnitTestTrace)trace)?.TraceLog;
                 return _traceLog;
             }

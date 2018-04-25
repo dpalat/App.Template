@@ -1,14 +1,8 @@
-using App.Template.XForms.Core.ViewModels;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Forms.Presenters;
-using MvvmCross.Platform;
-using MvvmCross.Platform.IoC;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using App.Template.XForms.Core.MvvmCross;
+using App.Template.XForms.Core.ViewModels;
+using MvvmCross.IoC;
+using MvvmCross.ViewModels;
 
 namespace App.Template.XForms.Core
 {
@@ -16,37 +10,15 @@ namespace App.Template.XForms.Core
     {
         public override void Initialize()
         {
-            LoadServiceLocator();
-            RegisterAppStart<MenuViewModel>();
+            RegisterAppStart<LoginViewModel>();
         }
 
-        public static IMvxViewsContainer LoadViewsContainer(IMvxViewsContainer viewsContainer)
-        {
-            var viewModelTypes = GetTypesInAssembly("App.Template.XForms.Core", MvvmConfig.ViewModelSuffix);
-
-            var viewTypes = GetTypesInAssembly("App.Template.XForms.Core", MvvmConfig.ViewSuffix);
-            foreach (var viewModelTypeAndName in viewModelTypes)
-            {
-                if (viewTypes.TryGetValue(viewModelTypeAndName.Key, out Type viewType))
-                    viewsContainer.Add(viewModelTypeAndName.Value, viewType);
-            }
-            return viewsContainer;
-        }
-
-        private static Dictionary<string, Type> GetTypesInAssembly(string assembyName, string typeSuffix)
-        {
-            return Assembly.Load(new AssemblyName(assembyName)).CreatableTypes()
-                .Where(t => t.Name.EndsWith(typeSuffix))
-                .ToDictionary(t => t.Name.Remove(t.Name.LastIndexOf(typeSuffix, StringComparison.Ordinal)));
-        }
-
-        private void LoadServiceLocator()
+        public static void LoadServiceLocator()
         {
             RegisterAssemblyTypes("App.Template.XForms.Core");
-            Mvx.RegisterSingleton<IMvxFormsPageLoader>(new MvxFormsViewLoader());
         }
 
-        private void RegisterAssemblyTypes(string assemblyName)
+        private static void RegisterAssemblyTypes(string assemblyName)
         {
             // By default register All types as interface and dynamic.
             Assembly.Load(new AssemblyName(assemblyName)).CreatableTypes()

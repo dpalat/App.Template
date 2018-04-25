@@ -1,4 +1,4 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using MvvmCross.Commands;
 
 namespace App.Template.XForms.Core.Models
 {
@@ -6,6 +6,6 @@ namespace App.Template.XForms.Core.Models
     {
         public string Text { get; set; }
         public string Image { get; set; }
-        public MvxCommand Command { get; set; }
+        public MvxAsyncCommand Command { get; set; }
     }
 }

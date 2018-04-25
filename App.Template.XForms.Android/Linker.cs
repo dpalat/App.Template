@@ -9,11 +9,11 @@ namespace App.Template.XForms.Android
 {
     // This class is never actually executed, but when Xamarin linking is enabled it does how to ensure types and properties
     // are preserved in the deployed app
-    public class LinkerPleaseInclude
+    public class Linker
     {
         public void Include(Button button)
         {
-            button.Click += (s,e) => button.Text = button.Text + "";
+            button.Click += (s,e) => button.Text = button.Text + string.Empty;
         }
 
         public void Include(CheckBox checkBox)
@@ -28,19 +28,19 @@ namespace App.Template.XForms.Android
 
         public void Include(View view)
         {
-            view.Click += (s, e) => view.ContentDescription = view.ContentDescription + "";
+            view.Click += (s, e) => view.ContentDescription = view.ContentDescription + string.Empty;
         }
 
         public void Include(TextView text)
         {
-            text.AfterTextChanged += (sender, args) => text.Text = "" + text.Text;
-            text.Hint = "" + text.Hint;
+            text.AfterTextChanged += (sender, args) => text.Text = string.Empty + text.Text;
+            text.Hint = string.Empty + text.Hint;
         }
         
         public void Include(CheckedTextView text)
         {
-            text.AfterTextChanged += (sender, args) => text.Text = "" + text.Text;
-            text.Hint = "" + text.Hint;
+            text.AfterTextChanged += (sender, args) => text.Text = string.Empty + text.Text;
+            text.Hint = string.Empty + text.Hint;
         }
 
         public void Include(CompoundButton cb)
@@ -70,7 +70,7 @@ namespace App.Template.XForms.Android
 
         public void Include(Activity act)
         {
-            act.Title = act.Title + "";
+            act.Title = act.Title + string.Empty;
         }
 
         public void Include(INotifyCollectionChanged changed)
@@ -83,9 +83,9 @@ namespace App.Template.XForms.Android
             command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
         }
         
-        public void Include(MvvmCross.Platform.IoC.MvxPropertyInjector injector)
+        public void Include(MvvmCross.IoC.MvxPropertyInjector injector)
         {
-            injector = new MvvmCross.Platform.IoC.MvxPropertyInjector ();
+            injector = new MvvmCross.IoC.MvxPropertyInjector();
         } 
 
         public void Include(System.ComponentModel.INotifyPropertyChanged changed)

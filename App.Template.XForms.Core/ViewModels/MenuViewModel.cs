@@ -1,20 +1,21 @@
-﻿using App.Template.XForms.Core.Models;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Forms.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using App.Template.XForms.Core.Models;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 
 namespace App.Template.XForms.Core.ViewModels
 {
-    public class MenuViewModel : MvxMasterDetailViewModel<HomeViewModel>
+    public class MenuViewModel : MvxViewModel
     {
         #region Fields
 
         private readonly IMvxNavigationService _navigationService;
         private IEnumerable<MenuItem> _menu;
         private MenuItem _selectedMenuItem;
-        private MvxCommand<MenuItem> _onSelectedMenuItemChangedCommand;
+        private MvxAsyncCommand<MenuItem> _onSelectedMenuItemChangedCommand;
         private string _userFullName;
         private string _userEmail;
 
@@ -53,18 +54,13 @@ namespace App.Template.XForms.Core.ViewModels
             set => SetProperty(ref _userEmail, value);
         }
 
-        private ICommand OnSelectedMenuItemChangedCommand
+        private ICommand OnSelectedMenuItemChangedCommand => _onSelectedMenuItemChangedCommand ?? (_onSelectedMenuItemChangedCommand =
+                                                                 new MvxAsyncCommand<MenuItem>(Execute));
+
+        private static async Task Execute(MenuItem menuItem)
         {
-            get
-            {
-                return _onSelectedMenuItemChangedCommand ?? (_onSelectedMenuItemChangedCommand =
-                           new MvxCommand<MenuItem>((item) =>
-                           {
-                               if (item == null)
-                                   return;
-                               item.Command.Execute();
-                           }));
-            }
+            if (menuItem == null) return;
+            await menuItem.Command.ExecuteAsync();
         }
 
         #endregion Properties
@@ -80,36 +76,29 @@ namespace App.Template.XForms.Core.ViewModels
                 {
                     Text = "First view",
                     Image = "ic_drawer_settings.png",
-                    Command = new MvxCommand(ClearStackAndShowViewModel<FirstViewModel>)
+                    Command = new MvxAsyncCommand(async () => await ClearStackAndShowViewModel<FirstViewModel>())
                 },
 
                 new MenuItem()
                 {
                     Text = "Second view",
                     Image = "ic_drawer_about.png",
-                    Command = new MvxCommand(ClearStackAndShowViewModel<SecondViewModel>)
+                    Command = new MvxAsyncCommand(async () => await ClearStackAndShowViewModel<SecondViewModel>())
                 },
 
                 new MenuItem()
                 {
                     Text = "Third view",
                     Image = "ic_power_settings.png",
-                    Command = new MvxCommand(ClearStackAndShowViewModel<ThirdViewModel>)
+                    Command = new MvxAsyncCommand(async () => await ClearStackAndShowViewModel<ThirdViewModel>())
                 }
             };
+            _navigationService.Navigate<HomeViewModel>();
         }
 
-        public override void RootContentPageActivated()
+        private async Task ClearStackAndShowViewModel<TViewModel>() where TViewModel : IMvxViewModel
         {
-            SelectedMenuItem = null;
-        }
-
-        private void ClearStackAndShowViewModel<TViewModel>() where TViewModel : IMvxViewModel
-        {
-            var presentationBundle =
-                new MvxBundle(new Dictionary<string, string> {{"NavigationMode", "ClearStack"}});
-            _navigationService.Navigate<TViewModel>(presentationBundle);
-            //ShowViewModel<TViewModel>(presentationBundle:presentationBundle);
+            await _navigationService.Navigate<TViewModel>();
         }
     }
 }

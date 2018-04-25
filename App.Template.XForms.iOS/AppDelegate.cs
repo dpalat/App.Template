@@ -1,7 +1,9 @@
-﻿using Foundation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.iOS.Platform;
-using MvvmCross.Platform;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using App.Template.XForms.Core;
+using Foundation;
+using MvvmCross.Forms.Platforms.Ios.Core;
 using UIKit;
 
 namespace App.Template.XForms.iOS
@@ -9,25 +11,38 @@ namespace App.Template.XForms.iOS
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : MvxApplicationDelegate
+    public class AppDelegate : MvxFormsApplicationDelegate<Setup, Core.App, FormsApp>
     {
-        // class-level declarations
+        #region Public Enums
 
-        public override UIWindow Window { get; set; }
+        public enum Signal
+        {
+            Sigbus = 10,
+            Sigsegv = 11
+        }
+
+        #endregion
+
+        #region Methods
+
+        public override void DidEnterBackground(UIApplication application)
+        {
+            // Use this method to release shared resources, save user data, invalidate timers and store the application state.
+            // If your application supports background exection this method is called instead of WillTerminate when the user quits.
+        }
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            EnableCrashReporting();
+            var result = base.FinishedLaunching(app, options);
+            new MvvmCross.Plugin.MethodBinding.Plugin().Load();
+            return result;
+        }
 
-            var setup = new Setup(this, Window);
-            setup.Initialize();
-
-            var startup = Mvx.Resolve<IMvxAppStart>();
-            startup.Start();
-
-            Window.MakeKeyAndVisible();
-
-            return true;
+        public override void OnActivated(UIApplication application)
+        {
+            // Restart any tasks that were paused (or not yet started) while the application was inactive. 
+            // If the application was previously in the background, optionally refresh the user interface.
         }
 
         public override void OnResignActivation(UIApplication application)
@@ -38,27 +53,52 @@ namespace App.Template.XForms.iOS
             // Games should use this method to pause the game.
         }
 
-        public override void DidEnterBackground(UIApplication application)
-        {
-            // Use this method to release shared resources, save user data, invalidate timers and store the application state.
-            // If your application supports background exection this method is called instead of WillTerminate when the user quits.
-        }
-
         public override void WillEnterForeground(UIApplication application)
         {
             // Called as part of the transiton from background to active state.
             // Here you can undo many of the changes made on entering the background.
         }
 
-        public override void OnActivated(UIApplication application)
-        {
-            // Restart any tasks that were paused (or not yet started) while the application was inactive. 
-            // If the application was previously in the background, optionally refresh the user interface.
-        }
-
         public override void WillTerminate(UIApplication application)
         {
             // Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
         }
+
+        private static void CurrentDomainOnUnhandledException(object sender,
+            UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+        }
+
+        private static void EnableCrashReporting()
+        {
+            var sigbus = Marshal.AllocHGlobal(512);
+            var sigsegv = Marshal.AllocHGlobal(512);
+
+            // Store Mono SIGSEGV and SIGBUS handlers
+            sigaction(Signal.Sigbus, IntPtr.Zero, sigbus);
+            sigaction(Signal.Sigsegv, IntPtr.Zero, sigsegv);
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+            //Crashlytics.Instance.Initialize();
+
+            // Restore Mono SIGSEGV and SIGBUS handlers
+            sigaction(Signal.Sigbus, sigbus, IntPtr.Zero);
+            sigaction(Signal.Sigsegv, sigsegv, IntPtr.Zero);
+
+            Marshal.FreeHGlobal(sigbus);
+            Marshal.FreeHGlobal(sigsegv);
+        }
+
+        [DllImport("libc")]
+        private static extern int sigaction(Signal sig, IntPtr act, IntPtr oact);
+
+        private static void TaskSchedulerOnUnobservedTaskException(object sender,
+            UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
+        {
+            unobservedTaskExceptionEventArgs.SetObserved();
+        }
+
+        #endregion
     }
 }

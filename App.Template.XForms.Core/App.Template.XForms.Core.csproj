@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
@@ -10,23 +10,24 @@
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
    
-  <ItemGroup>
-	<!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
-	<None Remove="**\*.xaml" />
-
-	<Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
-	<EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+ <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.0.0-beta.7" />
+    <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="2.0.2" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
+	<PackageReference Include="MvvmCross.Plugin.MethodBinding" Version="6.0.0-beta.7">
+		<NoWarn>NU1701</NoWarn>
+	</PackageReference>
+	<PackageReference Include="MvvmCross.Forms" Version="6.0.0-beta.7">
+		<NoWarn>NU1701</NoWarn>
+	</PackageReference>
   </ItemGroup>
    
   <ItemGroup>
-    <PackageReference Include="MvvmCross.Forms" Version="5.0.5" />
-    <PackageReference Include="MvvmCross.Plugin.MethodBinding" Version="5.0.5" />
-    <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="1.8.1" />
-    <PackageReference Include="Xamarin.Forms" Version="2.3.4.247" />
-    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.2.9" />
-  </ItemGroup>
-   
-  <ItemGroup>
+    <Compile Update="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ScanBarcodeView.xaml.cs">
       <DependentUpon>ScanBarcodeView.xaml</DependentUpon>
     </Compile>
@@ -42,8 +43,11 @@
   </ItemGroup>
    
   <ItemGroup>
-    <EmbeddedResource Update="Views\FirstView.xaml">
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    <EmbeddedResource Update="FormsApp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MasterDetailView.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
    

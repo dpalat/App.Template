@@ -4,10 +4,10 @@ using Xamarin.Forms.Xaml;
 namespace App.Template.XForms.Core.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [MvxMasterDetailPagePresentation(Position = MasterDetailPosition.Detail, WrapInNavigationPage = true, NoHistory = true)]
-    public partial class SecondView
+    [MvxContentPagePresentation(WrapInNavigationPage = true)]
+    public partial class LoginView
     {
-        public SecondView()
+        public LoginView()
         {
             InitializeComponent();
         }

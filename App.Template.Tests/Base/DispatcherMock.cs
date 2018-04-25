@@ -1,8 +1,8 @@
-﻿using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 
 namespace App.Template.Tests.Base
 {
@@ -11,7 +11,7 @@ namespace App.Template.Tests.Base
         public List<MvxViewModelRequest> Requests { get; } = new List<MvxViewModelRequest>();
         public List<MvxPresentationHint> Hints { get; } = new List<MvxPresentationHint>();
 
-        public bool RequestMainThreadAction(Action action)
+        public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
         {
             action();
             return true;

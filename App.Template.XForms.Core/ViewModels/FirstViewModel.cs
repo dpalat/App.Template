@@ -1,5 +1,4 @@
-﻿using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+﻿using MvvmCross.ViewModels;
 
 namespace App.Template.XForms.Core.ViewModels
 {

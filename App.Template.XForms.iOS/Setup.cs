@@ -1,80 +1,54 @@
-using ImageCircle.Forms.Plugin.iOS;
-using MvvmCross.Binding;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Forms.Bindings;
-using MvvmCross.Forms.Core;
-using MvvmCross.Forms.iOS.Presenters;
-using MvvmCross.iOS.Platform;
-using MvvmCross.iOS.Views;
-using MvvmCross.iOS.Views.Presenters;
-using MvvmCross.Localization;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Platform;
-using System.Collections.Generic;
-using System.Reflection;
-using UIKit;
+using App.Template.XForms.Core;
+using MvvmCross.Forms.Platforms.Ios.Core;
+using MvvmCross.Platforms.Ios.Views;
 
 namespace App.Template.XForms.iOS
 {
-    public class Setup : MvxIosSetup
+    public class Setup : MvxFormsIosSetup<Core.App, FormsApp>
     {
-        public Setup(MvxApplicationDelegate applicationDelegate, UIWindow window)
-            : base(applicationDelegate, window)
+        protected override IMvxIosViewsContainer CreateIosViewsContainer()
         {
-        }
-
-        protected override IMvxApplication CreateApp()
-        {
-            return new Core.App();
-        }
-
-        protected override IMvxTrace CreateDebugTrace()
-        {
-            return new DebugTrace();
-        }
-
-        protected override IMvxIosViewPresenter CreatePresenter()
-        {
-            Xamarin.Forms.Forms.Init();
-            ImageCircleRenderer.Init();
-
-
-            var xamarinFormsApp = new MvxFormsApplication();
-            //var presenter = new MvxFormsIosPagePresenter(Window, xamarinFormsApp);
-            var presenter = new MvxFormsIosMasterDetailPagePresenter(Window, xamarinFormsApp);
-            Mvx.RegisterSingleton<IMvxViewPresenter>(presenter);
-            return presenter;
-        }
-
-
-        protected override IEnumerable<Assembly> ValueConverterAssemblies
-        {
-            get
-            {
-                var toReturn =
-                    new List<Assembly>(base.ValueConverterAssemblies) {typeof(MvxLanguageConverter).Assembly};
-                return toReturn;
-            }
-        }
-
-        protected override void InitializeBindingBuilder()
-        {
-            var bindingBuilder = CreateBindingBuilder();
-
-            RegisterBindingBuilderCallbacks();
-            bindingBuilder.DoRegistration();
-        }
-
-        protected new MvxBindingBuilder CreateBindingBuilder()
-        {
-            return new MvxFormsBindingBuilder();
-        }
-
-        protected sealed override IMvxIosViewsContainer CreateIosViewsContainer()
-        {
-            var viewsContainer = Core.App.LoadViewsContainer(base.CreateIosViewsContainer());
+            var viewsContainer =
+                ((FormsApp) Xamarin.Forms.Application.Current).LoadViewsContainer(
+                    new MvxIosViewsContainer());
             return (IMvxIosViewsContainer) viewsContainer;
         }
+
+        protected override void InitializeFirstChance()
+        {
+            base.InitializeFirstChance();
+            Core.App.LoadServiceLocator();
+        }
+
+       //protected override void InitializeBindingBuilder()
+       // {
+       //     var bindingBuilder = CreateBindingBuilder();
+
+       //     RegisterBindingBuilderCallbacks();
+       //     bindingBuilder.DoRegistration();
+       // }
+
+
+        //protected override MvxBindingBuilder CreateBindingBuilder()
+        //{
+        //    return new MvxFormsIosBindingBuilder();
+        //}
+
+
+        //private void SubscribeToAppLifeCicleEvents()
+        //{
+        //    FormsApplication.Start += (s, e) =>
+        //    {
+        //        Mvx.Resolve<IMvxMessenger>().Publish(new AppStartMessage(FormsApplication));
+        //    };
+        //    FormsApplication.Sleep += (s, e) =>
+        //    {
+        //        Mvx.Resolve<IMvxMessenger>().Publish(new AppSleepMessage(FormsApplication));
+        //    };
+        //    FormsApplication.Resume += (s, e) =>
+        //    {
+        //        Mvx.Resolve<IMvxMessenger>().Publish(new AppResumeMessage(FormsApplication));
+        //    };
+        //}
     }
 }

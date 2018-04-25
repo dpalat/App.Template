@@ -1,13 +1,14 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using MvvmCross;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 
 namespace App.Template.XForms.Core.ViewModels
 {
     public class HomeViewModel : MvxViewModel
     {
-        public void ScanBarcode()
+        public async void ScanBarcode()
         {
-
-            ShowViewModel<ScanBarcodeViewModel>();
+            await Mvx.Resolve<IMvxNavigationService>().Navigate<ScanBarcodeViewModel>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MvvmCross.Forms.Presenters.Attributes;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ZXing.Mobile;
@@ -8,6 +9,7 @@ using ZXing.Net.Mobile.Forms;
 namespace App.Template.XForms.Core.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [MvxContentPagePresentation(WrapInNavigationPage = true)]
     public partial class ScanBarcodeView
     {
         private ZXingScannerView _zxing;
